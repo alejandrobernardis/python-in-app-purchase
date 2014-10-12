@@ -1,0 +1,8 @@
+schematics
+pymongo
+Crypto
+werkzeug
+tornado
+wtforms
+wtforms_tornado
+motor
