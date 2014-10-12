@@ -35,11 +35,10 @@ class AndroidStoreHandler(BaseHandler):
     _schema = AndroidStore
 
     @verify_session
-    @gen.coroutine
     def post(self, *args, **kwargs):
-        schema, isvalid = self.validate_form()
+        schema, is_valid = self.validate_schema()
         try:
-            if not isvalid:
+            if not is_valid:
                 self.get_json_error_response_and_finish(schema.errors)
             else:
                 receipt = json.loads(schema.receipt)
@@ -55,7 +54,7 @@ class AndroidStoreHandler(BaseHandler):
                     raise ValueError('Transaction ID (?)')
                 track = self.db['activity.store']
                 track_find_one = \
-                    yield track.find_one({'transaction_id': transaction_id})
+                    track.find_one({'transaction_id': transaction_id})
                 if track and track_find_one:
                     raise ValueError('Transaction ID (x)')
                 h = SHA.new(receipt)
@@ -131,9 +130,9 @@ class AppleStoreHandler(BaseHandler):
     @verify_session
     @gen.coroutine
     def post(self, *args, **kwargs):
-        schema, isvalid = self.validate_form()
+        schema, is_valid = self.validate_schema()
         try:
-            if not isvalid:
+            if not is_valid:
                 self.get_json_error_response_and_finish(schema.errors)
             else:
                 receipt = apple_json_sanitize(schema.receipt)
